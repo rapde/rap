@@ -6,10 +6,10 @@ Based on `docker` and `docker-compose`, help developers to rapidly set up and ea
 
 ## Config
 
-`rap` use `rap.yml` to manage environment dependencies.
+`rap` use `rap.yaml` to manage environment dependencies.
 
-```yml
-# rap.yml
+```yaml
+# rap.yaml
 
 # env. depns
 depns:
@@ -33,17 +33,17 @@ configs:
 ## Examples
 
 ```bash
-# interactively get depns info to create rap.yml
-$ rap init
+# prepare enviroments, e.g. download tools and build docker images
+$ rap env
 
-# prepare enviroments, e.g. download or build docker images
-$ rap prepare
-
-# start|stop|restart all depns as rap.yml described
+# start|stop|restart all depns as rap.yaml described
 $ rap start|stop|restart
 
 # interactivley add a new depn info
 $ rap add
+
+# start a web server to manage rap
+$ rap serve
 
 ```
 
