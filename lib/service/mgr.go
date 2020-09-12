@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/rapde/rap/lib/service/vars"
 	"strings"
 
 	"github.com/rapde/rap/lib/config"
@@ -22,6 +23,10 @@ func Mgr() IMgr {
 		mgr = &_Mgr{
 			servMap: make(map[config.ServiceKey]IService),
 		}
+
+		for _, v := range vars.ServiceMap {
+			mgr.Register(NewService(v))
+		}
 	}
 	return mgr
 }
@@ -34,7 +39,7 @@ type _Mgr struct {
 }
 
 func (m *_Mgr) Register(serv IService) {
-	m.servMap[serv.ServiceKey()] = serv
+	mgr.servMap[serv.ServiceKey()] = serv
 }
 
 func (m *_Mgr) SupportedServices() []config.ServiceKey {

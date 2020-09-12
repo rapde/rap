@@ -2,3 +2,5 @@
 rap.yaml
 /.rap
 /go.sum
+tools/*
+.idea/*
