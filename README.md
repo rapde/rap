@@ -42,6 +42,9 @@ $ rap add
 # start a web server to manage rap
 $ rap serve
 
+# show all services
+$ rap ps
+
 # download & build images specified in docker-compose file
 $ rap download
 

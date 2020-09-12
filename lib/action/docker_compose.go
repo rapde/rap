@@ -11,7 +11,7 @@ import (
 func ExecDockerCompose(args ...string) (output string, err error) {
 	dcBin, _ := utils.GetBinPath("docker-compose")
 
-	out, err := exec.Command(dcBin, args...).Output()
+	out, err := exec.Command(dcBin, args...).CombinedOutput()
 	if err != nil {
 		return "", fmt.Errorf("Failed to execute command: %s, %s", args, string(out))
 	}
