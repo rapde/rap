@@ -33,9 +33,6 @@ configs:
 ## Examples
 
 ```bash
-# prepare enviroments, e.g. download tools and build docker images
-$ rap env
-
 # start|stop|restart all depns as rap.yaml described
 $ rap start|stop|restart
 
@@ -44,6 +41,9 @@ $ rap add
 
 # start a web server to manage rap
 $ rap serve
+
+# download & build images specified in docker-compose file
+$ rap download
 
 ```
 

@@ -6,9 +6,6 @@ import (
 	"log"
 	"os"
 	"sort"
-	"strings"
-
-	"github.com/spf13/viper"
 )
 
 // AppConfig global app config
@@ -21,6 +18,7 @@ type Config struct {
 	Services []*Service // 服务列表
 }
 
+// Services 服务列表
 type Services []*Service
 
 // Len implement sort interface
@@ -96,58 +94,4 @@ func (c *Config) Save() {
 func Parse(configStr string) (config *Config, err error) {
 
 	return
-}
-
-// RapYaml rap.yml struct
-// config file should convert to rapyaml and save
-type RapYaml struct {
-	// Key is Service.Name, Value is Service.Service@Service.Version
-	// database: mysql@5.7
-	Dependencies map[string]string         `mapstructure:"depns"`
-	Configs      map[string]*ServiceConfig `mapstructure:"configs"`
-}
-
-// ToConfig convert rapyaml to app config
-func (r *RapYaml) toConfig() *Config {
-	svrs := make([]*Service, 0, len(r.Dependencies))
-
-	for name, service := range r.Dependencies {
-		splits := strings.Split(service, "@")
-		if len(splits) != 2 {
-			log.Fatalf("Invalid %s service, Parse version failed. Supported service/version e.g.: mysql@5.7", name)
-		}
-
-		svr := &Service{
-			Name:    name,
-			Service: splits[0],
-			Version: splits[1],
-			Config:  r.Configs[name],
-		}
-		svrs = append(svrs, svr)
-	}
-
-	return &Config{Services: svrs}
-}
-
-// LoadFromPath load from file path
-func LoadFromPath(path string) {
-	f, err := os.Open(path)
-	if err != nil {
-		log.Fatalf("%s open failed %v", path, err)
-	}
-	defer f.Close()
-
-	err = viper.ReadConfig(f)
-	if err != nil {
-		log.Fatalf("Read %s failed %v", path, err)
-	}
-
-	rapyaml := &RapYaml{}
-	err = viper.Unmarshal(rapyaml)
-	if err != nil {
-		log.Fatalf("Unmarshal %s failed %v", path, err)
-	}
-
-	AppConfig = rapyaml.toConfig()
-	AppConfig.Path = path
 }
