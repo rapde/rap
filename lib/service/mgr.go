@@ -50,11 +50,7 @@ func (m *_Mgr) SupportedServices() []config.ServiceKey {
 func (m *_Mgr) GenDockerComposeConfig(configs []*config.Service) string {
 	var b strings.Builder
 
-	b.WriteString(`# rap generated docker-compose config
-version: "2.0"
-
-services:
-`)
+	b.WriteString("# rap generated docker-compose config\n\nversion: \"2.0\"\n\nservices:")
 
 	for _, c := range configs {
 		if serv, ok := m.servMap[c.Key()]; ok {
