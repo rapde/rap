@@ -15,9 +15,9 @@ type Service struct {
 
 // ServiceConfig Service 配置
 type ServiceConfig struct {
-	Volumes    []string          // 容器卷信息
-	Ports      []string          // 容器端口映射
-	Enviroment map[string]string // 容器环境变量
+	Volumes    []string          `mapstructure:"volumes"`    // 容器卷信息
+	Ports      []string          `mapstructure:"ports"`      // 容器端口映射
+	Enviroment map[string]string `mapstructure:"enviroment"` // 容器环境变量
 }
 
 // Key 生成服务 key，用于区分不同的服务类型
