@@ -2,22 +2,27 @@ package cmd
 
 import (
 	"fmt"
+	"path"
 
+	"github.com/rapde/rap/lib/action"
+	"github.com/rapde/rap/lib/utils"
 	"github.com/spf13/cobra"
 )
+
+var dockerComposeFilePath = path.Join(utils.GetWorkDir(), ".rap", "docker-compose.yml")
 
 // startCmd represents the start command
 var startCmd = &cobra.Command{
 	Use:   "start",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "start services",
+	Long:  `start services specified in rap.yaml`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("start called")
+
+		// TODO 处理错误
+		out, err := action.ExecDockerCompose("-f", dockerComposeFilePath, "up", "-d")
+		fmt.Println(out, err)
+
 	},
 }
 
