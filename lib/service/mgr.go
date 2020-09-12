@@ -43,7 +43,7 @@ func (m *_Mgr) Register(serv IService) {
 }
 
 func (m *_Mgr) SupportedServices() []config.ServiceKey {
-	ret := make([]config.ServiceKey, len(m.servMap))
+	ret := make([]config.ServiceKey, 0, len(m.servMap))
 
 	for key := range m.servMap {
 		ret = append(ret, key)
