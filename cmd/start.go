@@ -17,12 +17,9 @@ var startCmd = &cobra.Command{
 	Short: "start services",
 	Long:  `start services specified in rap.yaml`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("start called")
-
 		// TODO 处理错误
 		out, err := action.ExecDockerCompose("-f", dockerComposeFilePath, "up", "-d")
 		fmt.Println(out, err)
-
 	},
 }
 
