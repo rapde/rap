@@ -9,11 +9,11 @@ var (
 		Service: "mysql",
 		Version: "5.7",
 		Config: &config.ServiceConfig{
-			Image:      "mysql:5.7",
-			Command:    "--default-authentication-plugin=mysql_native_password",
-			Volumes:    []string{".rap/mysql:/var/lib/mysql"},
-			Ports:      []string{"3306:3306"},
-			Enviroment: map[string]string{"MYSQL_ROOT_PASSWORD": "123"},
+			Image:       "mysql:5.7",
+			Command:     "--default-authentication-plugin=mysql_native_password",
+			Volumes:     []string{".rap/mysql:/var/lib/mysql"},
+			Ports:       []string{"3306:3306"},
+			Environment: map[string]string{"MYSQL_ROOT_PASSWORD": "123"},
 		},
 	}
 )
