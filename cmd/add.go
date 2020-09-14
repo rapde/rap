@@ -56,7 +56,7 @@ func interactivelyAddNewService() {
 
 	name := getName()
 	if len(name) == 0 {
-		name = fmt.Sprintf("%s_%s", svcVer, utils.GenRandomString(6))
+		name = fmt.Sprintf("%s_%s", svc, utils.GenRandomString(6))
 		log.Println("Generate default name:", name)
 	}
 
