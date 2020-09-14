@@ -44,7 +44,7 @@ func (c *Config) toRapYamlBuf() *bytes.Buffer {
 	sort.Sort(Services(c.Services))
 
 	for _, v := range c.Services {
-		buf.WriteString(fmt.Sprintf("    %s: %s@%s\n", v.Name, v.Service, v.Version))
+		buf.WriteString(fmt.Sprintf("  %s: %s@%s\n", v.Name, v.Service, v.Version))
 	}
 
 	buf.WriteString("configs:\n")
@@ -52,6 +52,7 @@ func (c *Config) toRapYamlBuf() *bytes.Buffer {
 		if v.Config == nil {
 			continue
 		}
+		buf.WriteString(fmt.Sprintf("  %s:\n", v.Name))
 		conf := v.Config
 		if len(conf.Volumes) > 0 {
 			buf.WriteString("    volumes:\n")
@@ -67,10 +68,10 @@ func (c *Config) toRapYamlBuf() *bytes.Buffer {
 			}
 		}
 
-		if len(conf.Enviroment) > 0 {
+		if len(conf.Environment) > 0 {
 			buf.WriteString("    enviroment:\n")
-			for k, vv := range conf.Enviroment {
-				buf.WriteString(fmt.Sprintf("      - %s: %s", k, vv))
+			for k, vv := range conf.Environment {
+				buf.WriteString(fmt.Sprintf("      %s: %s", k, vv))
 			}
 		}
 	}
