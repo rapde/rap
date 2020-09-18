@@ -25,3 +25,4 @@ yarn-error.log*
 
 # go generate
 static.go
+website.zip

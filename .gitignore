@@ -4,3 +4,6 @@ rap.yaml
 /go.sum
 tools/*
 .idea/*
+
+# bin
+rap
