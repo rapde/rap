@@ -6,6 +6,8 @@ import (
 	"os"
 )
 
+var _ Finfo = new(ZipFile)
+
 type ZipFile struct {
 	File *zip.File
 }
@@ -22,5 +24,3 @@ func (z *ZipFile) Open() (http.File, error) {
 
 	return &File{fi: z.FileInfo(), rc: rc}, nil
 }
-
-var _ Finfo = new(ZipFile)

@@ -11,29 +11,32 @@ import (
 	"time"
 )
 
-var OSX_Ignore = []string{"__MACOSX", ".DS_Store"}
-
+// FileSystem zip file system
 type FileSystem struct {
 	r    Reader
 	dirs map[string]*Dinfo
 }
 
+// FileSystemCloser zip file system with a closer
 type FileSystemCloser struct {
 	FileSystem
 	Filename string
 	c        io.Closer
 }
 
+// Options with FileSystem
 type Options struct {
 	Prefix string
 	Ignore []string
 }
 
+// Finfo for FileSystem
 type Finfo interface {
 	FileInfo() os.FileInfo
 	Open() (http.File, error)
 }
 
+// New file system with zip data
 func New(data []byte, opts *Options) (*FileSystem, error) {
 	b := bytes.NewReader(data)
 	r, err := zip.NewReader(b, b.Size())
@@ -43,9 +46,15 @@ func New(data []byte, opts *Options) (*FileSystem, error) {
 
 	dirs := newDirs(r.File, time.Now(), opts)
 
-	return &FileSystem{&reader{r}, dirs}, nil
+	fs := &FileSystem{
+		r:    &reader{r},
+		dirs: dirs,
+	}
+
+	return fs, nil
 }
 
+// Open zip file return file system closer
 func Open(name string, opts *Options) (*FileSystemCloser, error) {
 	rc, err := zip.OpenReader(name)
 	if err != nil {
@@ -59,11 +68,15 @@ func Open(name string, opts *Options) (*FileSystemCloser, error) {
 	}
 
 	dirs := newDirs(rc.File, fi.ModTime(), opts)
-	fs := FileSystem{&readCloser{rc}, dirs}
+	fs := FileSystem{
+		r:    &readCloser{rc},
+		dirs: dirs,
+	}
 
 	return &FileSystemCloser{fs, name, rc}, nil
 }
 
+// Open implement http.FileSystem
 func (fs *FileSystem) Open(name string) (file http.File, err error) {
 	name = strings.Trim(name, "/")
 	if name == "" {
@@ -90,6 +103,18 @@ func (fs *FileSystem) Open(name string) (file http.File, err error) {
 	return f.Open()
 }
 
+// Stat return fileinfo
+func (fs *FileSystem) Stat(abspath string) (os.FileInfo, error) {
+	for _, f := range fs.r.File() {
+		if f.Name == abspath {
+			return f.FileInfo(), nil
+		}
+	}
+
+	return nil, os.ErrNotExist
+}
+
+// Close implement io.Closer
 func (z *FileSystemCloser) Close() error {
 	return z.c.Close()
 }
@@ -103,7 +128,7 @@ func newDirs(files []*zip.File, modTime time.Time, opts *Options) map[string]*Di
 	}
 
 	if opts.Ignore == nil {
-		opts.Ignore = OSX_Ignore
+		opts.Ignore = Ignore
 	}
 
 	// ignore files
