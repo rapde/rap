@@ -1,12 +1,19 @@
 package cmd
 
 import (
-	"fmt"
+	"log"
 
 	"github.com/spf13/cobra"
 
 	"github.com/rapde/rap/website"
 )
+
+const (
+	defaultAddr = "localhost:8000" // Using port :8000 by default
+)
+
+// http server address
+var httpAddr string
 
 // serveCmd represents the start command
 var serveCmd = &cobra.Command{
@@ -14,20 +21,17 @@ var serveCmd = &cobra.Command{
 	Short: "start a webserver",
 	Long:  `start a webserver to manage rap`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(len(website.RAR))
+
+		if len(website.RAR) == 0 {
+			log.Fatalln("Oops! The website is not built, please first execute `go generate` in the website directory")
+		}
+
+		engine := website.New()
+		engine.Run(httpAddr)
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(serveCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// serveCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// serveCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	serveCmd.PersistentFlags().StringVar(&httpAddr, "http", defaultAddr, "HTTP service address (e.g. \"127.0.0.1:8000\" or just \":8000\")")
 }
